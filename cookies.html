@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="msg">
+      wellcom <span id="username"></span>
+      <button onclick="logout()">logout</button>
+    </div>
+
+    <div id="form">
+      <input type="text" id="fname" />
+      <input type="text" id="lname" />
+      <button onclick="register()">register</button>
+    </div>
+
+    <script src="assets/js/helpers.js"></script>
+    <script>
+      if (getCookie("fname") == "" || getCookie("lname") == "") {
+        shwoForm();
+        hideMsg();
+      } else {
+        showMsg();
+        hideForm();
+      }
+      function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == " ") {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+      function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      }
+
+      function deleteCookie(cname) {
+        setCookie(cname, "", -1);
+      }
+      function register() {
+        let fname = document.getElementById("fname").value;
+        let lname = document.getElementById("lname").value;
+        console.log(fname, lname);
+        setCookie("fname", fname, 30);
+        setCookie("lname", lname, 30);
+        showMsg();
+        hideForm();
+      }
+
+      function logout() {
+        deleteCookie("fname");
+        deleteCookie("lname");
+        hideMsg();
+        showForm();
+      }
+
+      function showMsg() {
+        document.getElementById("msg").style.display = "block";
+      }
+      function hideMsg() {
+        document.getElementById("msg").style.display = "none";
+      }
+      function updateMsg() {
+        document.getElementById("msg").innerText =
+          getCookie("fname") + " " + "lname";
+      }
+      function showForm() {
+        document.getElementById("form").style.display = "block";
+      }
+      function hideForm() {
+        document.getElementById("form").style.display = "none";
+      }
+    </script>
+  </body>
+</html>
